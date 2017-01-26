@@ -2,15 +2,13 @@
 //    Weather Forecast Display                          //
 //           GK Grotsky                                 //
 //            12/29/16                                  //
-//     Based on the following:                          //
-// http://educ8s.tv/art-deco-weather-forecast-display/  //
 //////////////////////////////////////////////////////////
 
 #ifndef WeatherDisplay_h
 #define WeatherDisplay_h
 #include <Arduino.h>
 
-#define VERSION  "1.0"         // Version number
+#define VERSION  "1.1"         // Version number
 #define GETDATACOUNT 360       // Time to get more data
 #define CONVERTTIMETOLOCAL     // Add time error offset
 #define CREDIT "GK Grotsky"    // Yours truly :-)
