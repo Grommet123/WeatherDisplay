@@ -1,10 +1,14 @@
-//////////////////////////////////////////////////////////
-//    Weather Forecast Display                          //
-//           GK Grotsky                                 //
-//            12/29/16                                  //
-//     Based on the following:                          //
-// http://educ8s.tv/art-deco-weather-forecast-display/  //
-//////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//    Weather Forecast Display                                       //
+//           GK Grotsky                                              //
+//            12/29/16                                               //
+//     Based on the following:                                       //
+// http://educ8s.tv/art-deco-weather-forecast-display/               //
+//                                                                   //
+//     See the following for a description on JSON                   //
+//     decoding:                                                     //
+// https://www.arduino.cc/en/Tutorial.WiFi101WeatherAudioNotifier    //
+///////////////////////////////////////////////////////////////////////
 
 #include "WeatherDisplay.h"
 #include <ESP8266WiFi.h>
@@ -12,19 +16,20 @@
 #include <Adafruit_ST7735.h>
 #include <Adafruit_GFX.h>
 
-const char* ssid     = "YourSSID"; // SSID of local network
-const char* password = "YourPassword"; // Password on network
-String APIKEY = "YourAPIKEY"; // openweathermap.org APIKEY
-String CityID = "123456"; // openweathermap.org City
-
 WiFiClient client;
 char servername[] = "api.openweathermap.org"; // remote server we will connect to
 String result;
 boolean night = false;
 
-extern  unsigned char  cloud[];
-extern  unsigned char  thunder[];
-extern  unsigned char  wind[];
+extern unsigned char cloud[];
+extern unsigned char thunder[];
+extern unsigned char wind[];
+// Fill in these four variables within NetworkConnection.c
+// with your ssid, password, APIKey and cityID
+extern const char* ssid; // SSID of local network
+extern const char* password; // Password on network
+extern const char* APIKey; // openweathermap.org API key
+extern const char* cityID; // openweathermap.org city
 
 Adafruit_ST7735 tft(TFT_CS, TFT_DC, TFT_RST);
 
@@ -116,6 +121,9 @@ void getWeatherData() //client function to send/receive GET request data.
 #ifdef DEBUG
   Serial.println("Getting Weather Data");
 #endif
+
+String APIKEY(APIKey);
+String CityID(cityID);
   if (client.connect(servername, 80)) {  //starts client connection, checks for connection
     client.println("GET /data/2.5/forecast?id=" + CityID + "&units=imperial&cnt=1&APPID=" + APIKEY);
     client.println("Host: api.openweathermap.org");
@@ -406,7 +414,10 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude, in
 #ifdef CONVERTTIMETOLOCAL
   // For some reason, time is off by some (???) hours from UTC. Need to compensate
   int TimeErrorOffset = -3;
-  if (((time > 18) && (time < 21)) || (time == 12) || (time == 0)) {
+  if (((time > 18) && (time < 21)) ||
+      (time == 12) ||
+      (time == 0) ||
+      (time == 15)) {
     time += (TimeErrorOffset + 2);
   }
   else {
