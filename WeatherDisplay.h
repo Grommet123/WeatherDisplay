@@ -8,15 +8,15 @@
 #define WeatherDisplay_h
 #include <Arduino.h>
 
-#define VERSION  "2.0"         // Version number
-#define GETDATACOUNT 360       // Time to get more data
+#define VERSION  "2.1"         // Version number
+#define GETDATACOUNT 1800      // Time to get more data (in seconds)
 #define CONVERTTIMETOLOCAL     // Add time error offset
 #define CREDIT "GK Grotsky"    // Yours truly :-)
-#define DEBUG                  // Display debug data
 #define TOGGLEDISPLAY_SW D1    // Toggle display switch
 #define ALIVE_LED D3           // Flashes to indicate that the system is alive
 #define ALIVEBRIGHTNESS 150    // Brightness of the alive LED
-#define SAFETIME 5             // Safe time to switch between the main and aux display
+#define DEBUG                  // Display debug data
+#define SAFETIME 25            // Safe time to switch between the main and aux display (in seconds)
 
 // Color definitions
 #define BLACK    0x0000
