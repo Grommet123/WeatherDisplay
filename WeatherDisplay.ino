@@ -5,9 +5,9 @@
 //     Based on the following:                                       //
 // http://educ8s.tv/art-deco-weather-forecast-display/               //
 //                                                                   //
-//     See the following for a description on JSON                   //
-//     decoding:                                                     //
+//     See the following for a description on JSON decoding:         //                                                    //
 // https://www.arduino.cc/en/Tutorial.WiFi101WeatherAudioNotifier    //
+//                                                                   //
 ///////////////////////////////////////////////////////////////////////
 
 #include "WeatherDisplay.h"
@@ -20,18 +20,17 @@ WiFiClient client;
 char servername[] = "api.openweathermap.org"; // remote server we will connect to
 String result;
 boolean night = false;
+Adafruit_ST7735 tft(TFT_CS, TFT_DC, TFT_RST);
 
 extern unsigned char cloud[];
 extern unsigned char thunder[];
 extern unsigned char wind[];
-// Fill in these four variables within NetworkConnection.c
-// with your ssid, password, APIKey and cityID
+/* Fill in these four variables within NetworkConnection.c
+   with your ssid, password, APIKey and cityID */
 extern const char* ssid; // SSID of local network
 extern const char* password; // Password on network
 extern const char* APIKey; // openweathermap.org API key
 extern const char* cityID; // openweathermap.org city
-
-Adafruit_ST7735 tft(TFT_CS, TFT_DC, TFT_RST);
 
 void setup() {
 #ifdef DEBUG
@@ -108,7 +107,7 @@ void loop() {
     analogWrite(ALIVE_LED, flasher * ALIVEBRIGHTNESS);
     // Seed random number generator
     randomSeed(counter + flasher);
-    delay(5000);
+    delay(1000);
 #ifdef DEBUG
     Serial.print("counter = ");
     Serial.println(counter);
@@ -210,6 +209,12 @@ String CityID(cityID);
   Serial.println(latitude + " Deg");
   Serial.print("Longitude ");
   Serial.println(longitude + " Deg");
+  Serial.print("Sunrise ");
+  Serial.print(riseI);
+  Serial.println("am");
+  Serial.print("Sunset ");
+  Serial.print(setI);
+  Serial.println("pm");
   Serial.print("Time last updated ");
 #ifdef CONVERTTIMETOLOCAL
   Serial.println(timeS);
@@ -217,8 +222,7 @@ String CityID(cityID);
   Serial.print(timeS);
   Serial.println(" UTC");
 #endif
-
-#endif
+#endif // #ifdef DEBUG
 
   clearScreen();
 
@@ -416,7 +420,7 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude, in
   int TimeErrorOffset = -3;
   if (((time > 18) && (time < 21)) ||
       (time == 12) ||
-      (time == 0) ||
+//      (time == 0) ||
       (time == 15)) {
     time += (TimeErrorOffset + 2);
   }
