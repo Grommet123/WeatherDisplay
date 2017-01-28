@@ -20,6 +20,9 @@ WiFiClient client;
 char servername[] = "api.openweathermap.org"; // remote server we will connect to
 String result;
 boolean night = false;
+bool toggleDisplay = digitalRead(TOGGLEDISPLAY_SW);
+static bool pastToggleDisplay = toggleDisplay;
+
 Adafruit_ST7735 tft(TFT_CS, TFT_DC, TFT_RST);
 
 extern unsigned char cloud[];
@@ -82,9 +85,6 @@ void setup() {
 #endif
 } // setup
 
-bool toggleDisplay = digitalRead(TOGGLEDISPLAY_SW);
-static bool pastToggleDisplay = toggleDisplay;
-
 void loop() {
   static int counter = GETDATACOUNT;
   byte flasher;
@@ -121,8 +121,8 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.println("Getting Weather Data");
 #endif
 
-String APIKEY(APIKey);
-String CityID(cityID);
+  String APIKEY(APIKey);
+  String CityID(cityID);
   if (client.connect(servername, 80)) {  //starts client connection, checks for connection
     client.println("GET /data/2.5/forecast?id=" + CityID + "&units=imperial&cnt=1&APPID=" + APIKEY);
     client.println("Host: api.openweathermap.org");
@@ -164,7 +164,10 @@ String CityID(cityID);
   JsonObject &root = json_buf.parseObject(jsonArray);
   if (!root.success())
   {
+#ifdef DEBUG
     Serial.println("parseObject() failed");
+#endif
+    return;
   }
 
   String location = root["city"]["name"];
@@ -420,7 +423,7 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude, in
   int TimeErrorOffset = -3;
   if (((time > 18) && (time < 21)) ||
       (time == 12) ||
-//      (time == 0) ||
+      //      (time == 0) ||
       (time == 15)) {
     time += (TimeErrorOffset + 2);
   }
