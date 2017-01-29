@@ -241,7 +241,10 @@ void getWeatherData() //client function to send/receive GET request data.
                  setI);
   }
   else {
-    printMainData(humidity, temperature, timeS, idString.toInt());
+    printMainData(humidity,
+                  temperature,
+                  timeS,
+                  idString.toInt());
   }
 }
 
@@ -273,6 +276,7 @@ void printAuxData(String location,
   while (randomColor == lastRandomNumber) {
     randomColor = random(0, 7);
   }
+  lastRandomNumber = randomColor;
   tft.setTextColor(textColor[randomColor]);
   tft.setTextSize(1);
   tft.setCursor(0, 0);
@@ -312,7 +316,10 @@ void printAuxData(String location,
   tft.println((night) ? "It is Night time" : "It is Day time");
 }
 
-void printMainData(String humidityString, String temperature, String time, int weatherID)
+void printMainData(String humidityString,
+                   String temperature,
+                   String time,
+                   int weatherID)
 {
   tft.setTextColor(WHITE);
   tft.setTextSize(1);
