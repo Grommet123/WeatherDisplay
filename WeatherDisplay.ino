@@ -21,7 +21,7 @@ char servername[] = "api.openweathermap.org"; // remote server we will connect t
 String result;
 boolean night = false;
 bool toggleDisplay = digitalRead(TOGGLEDISPLAY_SW);
-static bool pastToggleDisplay = toggleDisplay;
+bool pastToggleDisplay = toggleDisplay;
 
 Adafruit_ST7735 tft(TFT_CS, TFT_DC, TFT_RST);
 
@@ -238,7 +238,8 @@ void getWeatherData() //client function to send/receive GET request data.
                  windDirection,
                  timeS,
                  riseI,
-                 setI);
+                 setI,
+                 idString.toInt());
   }
   else {
     printMainData(humidity,
@@ -256,7 +257,8 @@ void printAuxData(String location,
                   String windDirection,
                   String time,
                   int rise,
-                  int set)
+                  int set,
+                  int weatherID)
 {
   static long lastRandomNumber;
   long randomColor;
@@ -290,7 +292,18 @@ void printAuxData(String location,
   tft.print("Humidity: ");
   tft.print(humidity.toInt());
   tft.println("% RH");
-  tft.println("");
+  if (randomColor == 0) {
+    tft.setTextColor(textColor[1]);
+  }
+  else if (randomColor == 6) {
+    tft.setTextColor(textColor[5]);
+  }
+  else {
+    tft.setTextColor(textColor[randomColor + 1]);
+  }
+  tft.print("Weather ID ");
+  tft.println(weatherID);
+  tft.setTextColor(textColor[randomColor]);
   tft.print("Sky: ");
   tft.println(description);
   tft.println("");
