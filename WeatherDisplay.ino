@@ -441,10 +441,7 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
   int month = monthS.toInt();
   String dayS = timeS.substring(8, 10);
   int day = dayS.toInt();
-  *monthI = month;
-  *dayI = day;
-  *yearI = year;
-
+  
   timeS = timeS.substring(length - 8, length - 6); // Strip out the hours
   int time = timeS.toInt();
 
@@ -453,6 +450,7 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
   int TimeErrorOffset = -3;
   if (((time > 18) && (time < 21)) ||
       (time == 12) ||
+      (time == 0)  ||
       (time == 15)) {
     time += (TimeErrorOffset + 2);
   }
@@ -462,7 +460,12 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
   // Convert UTC time & date to local time & date
   bool DST = convertToLocal(&time, &year, &month,
                             &day, (double)longitude.toFloat(), true); // true means date and DST conversion
+ 
 #endif
+
+  *monthI = month;
+  *dayI = day;
+  *yearI = year;
 
 #ifdef DEBUG
   Serial.print("\nDate ");
