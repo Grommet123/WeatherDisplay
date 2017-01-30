@@ -90,7 +90,7 @@ void loop() {
   byte flasher;
 
   toggleDisplay = digitalRead(TOGGLEDISPLAY_SW);
-  if ((toggleDisplay != pastToggleDisplay) && (counter >= SAFETIME)) {
+  if (toggleDisplay != pastToggleDisplay) {
     pastToggleDisplay = toggleDisplay;
     counter = GETDATACOUNT;
   }
@@ -443,18 +443,17 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude, in
   int TimeErrorOffset = -3;
   if (((time > 18) && (time < 21)) ||
       (time == 12) ||
-      //      (time == 0) ||
       (time == 15)) {
     time += (TimeErrorOffset + 2);
   }
   else {
     time += TimeErrorOffset;
   }
-#endif
-
   // Convert UTC time & date to local time & date
   bool DST = convertToLocal(&time, &year, &month,
                             &day, (double)longitude.toFloat(), true); // true means date and DST conversion
+#endif
+
 #ifdef DEBUG
   Serial.print("\nDate ");
   Serial.print(month);
