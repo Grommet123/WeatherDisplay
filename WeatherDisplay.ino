@@ -182,9 +182,10 @@ void getWeatherData() //client function to send/receive GET request data.
   String windSpeed = root["list"]["wind"]["speed"];
   String windDirection = root["list"]["wind"]["deg"];
 
-  int riseI;
-  int setI;
-  timeS = convertGMTTimeToLocal(timeS, latitude, longitude, &riseI, &setI);
+  int riseI, setI, monthI, dayI, yearI;
+  timeS = convertGMTTimeToLocal(timeS, latitude, longitude,
+                                &riseI, &setI, &monthI, &dayI, &yearI);
+  String dateS = String(monthI) + '/' + String(dayI) + '/' + String(yearI);
 
   int length = temperature.length();
   if (length == 5)
@@ -239,15 +240,17 @@ void getWeatherData() //client function to send/receive GET request data.
                  timeS,
                  riseI,
                  setI,
-                 idString.toInt());
+                 idString.toInt(),
+                 dateS);
   }
   else {
     printMainData(humidity,
                   temperature,
                   timeS,
-                  idString.toInt());
+                  idString.toInt(),
+                  dateS);
   }
-}
+} // void getWeatherData()
 
 void printAuxData(String location,
                   String temperature,
@@ -258,10 +261,12 @@ void printAuxData(String location,
                   String time,
                   int rise,
                   int set,
-                  int weatherID)
+                  int weatherID,
+                  String dateS)
 {
   static long lastRandomNumber;
   long randomColor;
+  long newRandomColor;
   unsigned int textColor[] = {
     BLUE,
     RED,
@@ -279,60 +284,57 @@ void printAuxData(String location,
     randomColor = random(0, 7);
   }
   lastRandomNumber = randomColor;
+  if (randomColor == 0) {
+    newRandomColor = 1;
+  }
+  else if (randomColor == 6) {
+    newRandomColor = 5;
+  }
+  else {
+    newRandomColor = randomColor + 1;
+  }
   tft.setTextColor(textColor[randomColor]);
   tft.setTextSize(1);
   tft.setCursor(0, 0);
   tft.print("Location: ");
   tft.println(location);
-  tft.println("");
   tft.print("Temperature: ");
   tft.print(temperature.toInt());
   tft.println(" F");
-  tft.println("");
   tft.print("Humidity: ");
   tft.print(humidity.toInt());
   tft.println("% RH");
-  if (randomColor == 0) {
-    tft.setTextColor(textColor[1]);
-  }
-  else if (randomColor == 6) {
-    tft.setTextColor(textColor[5]);
-  }
-  else {
-    tft.setTextColor(textColor[randomColor + 1]);
-  }
   tft.print("Weather ID ");
   tft.println(weatherID);
   tft.setTextColor(textColor[randomColor]);
   tft.print("Sky: ");
   tft.println(description);
-  tft.println("");
   tft.print("Wind Spd: ");
   tft.print(windSpeed.toInt());
   tft.println(" Knots");
-  tft.println("");
   tft.print("Wind Dir: ");
   tft.print(windDirection.toInt());
   tft.println(" Degs");
-  tft.println("");
+  tft.setTextColor(textColor[newRandomColor]);
   tft.print("Time: ");
   tft.println(time);
-  tft.println("");
+  tft.print("Date: ");
+  tft.println(dateS);
+  tft.setTextColor(textColor[randomColor]);
   tft.print("Sunrise: ");
   tft.print(rise);
   tft.println(":00am");
-  tft.println("");
   tft.print("Sunset: ");
   tft.print(set);
   tft.println(":00pm");
-  tft.println("");
   tft.println((night) ? "It is Night time" : "It is Day time");
 }
 
 void printMainData(String humidityString,
                    String temperature,
                    String time,
-                   int weatherID)
+                   int weatherID,
+                   String dateS)
 {
   tft.setTextColor(WHITE);
   tft.setTextSize(1);
@@ -353,6 +355,9 @@ void printMainData(String humidityString,
   tft.setCursor(27, 132);
   tft.print(humidityString);
   tft.print("% RH");
+  tft.setTextSize(1);
+  tft.setCursor(40, 150);
+  tft.print(dateS);
 }
 
 void printWeatherIcon(int id)
@@ -424,7 +429,8 @@ void printWeatherIcon(int id)
   }
 }
 
-String convertGMTTimeToLocal(String timeS, String latitude, String longitude, int* riseI, int* setI)
+String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
+                             int* riseI, int* setI, int* monthI, int* dayI, int* yearI)
 {
   double rise, set;
 
@@ -435,6 +441,10 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude, in
   int month = monthS.toInt();
   String dayS = timeS.substring(8, 10);
   int day = dayS.toInt();
+  *monthI = month;
+  *dayI = day;
+  *yearI = year;
+
   timeS = timeS.substring(length - 8, length - 6); // Strip out the hours
   int time = timeS.toInt();
 
