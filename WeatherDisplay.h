@@ -8,7 +8,7 @@
 #define WeatherDisplay_h
 #include <Arduino.h>
 
-#define VERSION  "3.1"         // Version number
+#define VERSION  "3.2"         // Version number
 #define GETDATACOUNT 1800      // Time to get more data (in seconds)
 #define CONVERTTIMETOLOCAL     // Add time error offset
 #define CREDIT "GK Grotsky"    // Yours truly :-)
@@ -122,6 +122,5 @@
 /* below the horizon.                                                      */
 #define astronomical_twilight(year,month,day,lon,lat,start,end)  \
   __sunriset__( year, month, day, lon, lat, -18.0, 0, start, end )
-
 
 #endif // #ifndef WeatherDisplay_h
