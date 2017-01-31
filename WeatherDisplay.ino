@@ -450,9 +450,11 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
   int TimeErrorOffset = -3;
   if (((time > 18) && (time < 21)) ||
       (time == 12) ||
-      (time == 0)  ||
       (time == 15)) {
     time += (TimeErrorOffset + 2);
+  }
+  else if (time == 0) {
+    time += (TimeErrorOffset + 0);
   }
   else {
     time += TimeErrorOffset;
