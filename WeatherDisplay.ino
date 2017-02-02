@@ -17,7 +17,7 @@
 #include <Adafruit_GFX.h>
 
 WiFiClient client;
-char servername[] = "api.openweathermap.org"; // remote server we will connect to
+String serverName = "api.openweathermap.org"; // Remote server we will connect to
 String result;
 boolean night = false;
 bool toggleDisplay = digitalRead(TOGGLEDISPLAY_SW);
@@ -123,16 +123,16 @@ void getWeatherData() //client function to send/receive GET request data.
 
   String APIKEY(APIKey);
   String CityID(cityID);
-  if (client.connect(servername, 80)) {  //starts client connection, checks for connection
+  if (client.connect(serverName.c_str(), 80)) { // Starts client connection, checks for connection
     client.println("GET /data/2.5/forecast?id=" + CityID + "&units=imperial&cnt=1&APPID=" + APIKEY);
-    client.println("Host: api.openweathermap.org");
+    client.println("Host: " + serverName);
     client.println("User-Agent: ArduinoWiFi/1.1");
     client.println("Connection: close");
     client.println();
   }
   else {
 #ifdef DEBUG
-    Serial.println("connection failed"); //error message if no client connect
+    Serial.println("connection failed"); // Error message if no client connect
     Serial.println();
 #endif
     return;
@@ -222,12 +222,7 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.print(setI);
   Serial.println("pm");
   Serial.print("Time last updated ");
-#ifdef CONVERTTIMETOLOCAL
   Serial.println(timeS);
-#else
-  Serial.print(timeS);
-  Serial.println(" UTC");
-#endif
   Serial.print("UTC ");
   Serial.println(timeUTC);
 #endif // #ifdef DEBUG
@@ -375,7 +370,7 @@ void printWeatherIcon(int id)
     case 800: drawClearWeather(); break;
     case 801: drawFewClouds(); break;
     case 802: drawFewClouds(); break;
-    case 803: drawCloud(); break;
+    case 803: drawFewClouds(); break;
     case 804: drawCloud(); break;
 
     case 200: drawThunderstorm(); break;
@@ -400,7 +395,6 @@ void printWeatherIcon(int id)
     case 321: drawLightRain(); break;
 
     case 500: drawLightRainWithSunOrMoon(); break;
-    //    case 501: drawLightRainWithSunOrMoon(); break;
     case 501: drawModerateRain(); break;
     case 502: drawLightRainWithSunOrMoon(); break;
     case 503: drawLightRainWithSunOrMoon(); break;
@@ -453,7 +447,7 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
   timeS = timeS.substring(length - 8, length - 6); // Strip out the hours
   int time = timeS.toInt();
 
-#ifdef CONVERTTIMETOLOCAL
+#ifdef ERROROFFSET
   // For some reason, openweathermap.org time is off by some (???)
   // hours from UTC. Need to compensate
   int TimeErrorOffset = -3;
@@ -461,11 +455,7 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
       (time == 12)) {
     time += (TimeErrorOffset + 2);
   }
-  else if (time == 15) {
-    time += (TimeErrorOffset + 0);
-  }
   else if (time == 0) {
-    time += (TimeErrorOffset + 0);
     convertDate(time, &year, &month, &day);
   }
   else {
@@ -488,9 +478,7 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
   Serial.print(day);
   Serial.print("/");
   Serial.println(year);
-#ifdef CONVERTTIMETOLOCAL
   Serial.println((DST) ? "It's DST" : "It's ST");
-#endif
 #endif
 
   // Get sunrise and sunset time in UTC
