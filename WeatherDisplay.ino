@@ -456,6 +456,7 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
     time += (TimeErrorOffset + 2);
   }
   else if (time == 0) {
+    time += TimeErrorOffset;
     convertDate(time, &year, &month, &day);
   }
   else {
