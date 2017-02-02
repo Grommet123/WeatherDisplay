@@ -8,7 +8,7 @@
 #define WeatherDisplay_h
 #include <Arduino.h>
 
-#define VERSION  "3.6"         // Version number
+#define VERSION  "3.7"         // Version number
 #define GETDATACOUNT 1800      // Time to get more data (in seconds)
 #define ERROROFFSET            // Add time/date error offset
 #define CREDIT "GK Grotsky"    // Yours truly :-)
