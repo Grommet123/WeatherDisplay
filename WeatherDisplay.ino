@@ -183,6 +183,8 @@ void getWeatherData() //client function to send/receive GET request data.
   String windDirection = root["list"]["wind"]["deg"];
 
   int riseI, setI, monthI, dayI, yearI;
+  String timeUTC = timeS;
+  timeUTC = timeUTC.substring(timeUTC.length() - 8, timeUTC.length()); // Strip out the time (XX:XX:XX)
   timeS = convertGMTTimeToLocal(timeS, latitude, longitude,
                                 &riseI, &setI, &monthI, &dayI, &yearI);
   String dateS = String(monthI) + '/' + String(dayI) + '/' + String(yearI);
@@ -226,6 +228,8 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.print(timeS);
   Serial.println(" UTC");
 #endif
+  Serial.print("UTC ");
+  Serial.println(timeUTC);
 #endif // #ifdef DEBUG
 
   clearScreen();
@@ -241,7 +245,8 @@ void getWeatherData() //client function to send/receive GET request data.
                  riseI,
                  setI,
                  idString.toInt(),
-                 dateS);
+                 dateS,
+                 timeUTC);
   }
   else {
     printMainData(humidity,
@@ -262,7 +267,8 @@ void printAuxData(String location,
                   int rise,
                   int set,
                   int weatherID,
-                  String dateS)
+                  String dateS,
+                  String timeUTC)
 {
   static long lastRandomNumber;
   long randomColor;
@@ -318,6 +324,8 @@ void printAuxData(String location,
   tft.setTextColor(textColor[newRandomColor]);
   tft.print("Time: ");
   tft.println(time);
+  tft.print("UTC: ");
+  tft.println(timeUTC);
   tft.print("Date: ");
   tft.println(dateS);
   tft.setTextColor(textColor[randomColor]);
