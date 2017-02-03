@@ -267,7 +267,7 @@ void printAuxData(String location,
 {
   static long lastRandomNumber;
   long randomColor;
-  long newRandomColor;
+  long anotherRandomColor;
   unsigned int textColor[] = {
     BLUE,
     RED,
@@ -286,13 +286,13 @@ void printAuxData(String location,
   }
   lastRandomNumber = randomColor;
   if (randomColor == 0) {
-    newRandomColor = 1;
+    anotherRandomColor = 1;
   }
   else if (randomColor == 6) {
-    newRandomColor = 5;
+    anotherRandomColor = 5;
   }
   else {
-    newRandomColor = randomColor + 1;
+    anotherRandomColor = randomColor + 1;
   }
   tft.setTextColor(textColor[randomColor]);
   tft.setTextSize(1);
@@ -307,8 +307,8 @@ void printAuxData(String location,
   tft.println("% RH");
   tft.print("Weather ID ");
   tft.println(weatherID);
-  tft.setTextColor(textColor[randomColor]);
   tft.print("Sky: ");
+  if ((sizeof("Sky: ") + description.length()) >= 21 /*Length of line*/) description.replace(' ', '\n');
   tft.println(description);
   tft.print("Wind Spd: ");
   tft.print(windSpeed.toInt());
@@ -316,8 +316,8 @@ void printAuxData(String location,
   tft.print("Wind Dir: ");
   tft.print(windDirection.toInt());
   tft.println(" Degs");
-  tft.setTextColor(textColor[newRandomColor]);
-  tft.print("Time: ");
+  tft.setTextColor(textColor[anotherRandomColor]);
+  tft.print("Time LU: ");
   tft.println(time);
   tft.print("UTC: ");
   tft.println(timeUTC);
@@ -339,10 +339,11 @@ void printMainData(String humidityString,
                    int weatherID,
                    String dateS)
 {
-  tft.setTextColor(WHITE);
+  tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  tft.setCursor(40, 5);
-  tft.print(time);
+  tft.setCursor(17, 5);
+  tft.print("Updated " + time);
+  tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.setCursor(27, 20);
   tft.print(temperature);
@@ -358,6 +359,7 @@ void printMainData(String humidityString,
   tft.setCursor(27, 132);
   tft.print(humidityString);
   tft.print("% RH");
+  tft.setTextColor(YELLOW);
   tft.setTextSize(1);
   tft.setCursor(40, 150);
   tft.print(dateS);
