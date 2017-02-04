@@ -283,10 +283,11 @@ void printAuxData(String location,
   };
 
   // Get random number
-  randomColor =  random(0, 7);
+  byte maxRandomNumber = sizeof(textColor) / sizeof(unsigned int);
+  randomColor =  random(maxRandomNumber);
   // If random number repeats, try again
   while (randomColor == lastRandomNumber) {
-    randomColor = random(0, 7);
+    randomColor = random(maxRandomNumber);
   }
   lastRandomNumber = randomColor;
   if (randomColor == 0) {
