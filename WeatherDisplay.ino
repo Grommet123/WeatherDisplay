@@ -87,7 +87,7 @@ void setup() {
 
 void loop() {
   static int counter = GETDATACOUNT;
-  byte flasher;
+  bool flasher;
 
   toggleDisplay = digitalRead(TOGGLEDISPLAY_SW);
   if (toggleDisplay != pastToggleDisplay) {
@@ -103,7 +103,8 @@ void loop() {
   }
   else {
     counter++;
-    flasher = (counter % 2 == 0);
+    flasher = (counter % 2 == 0); // 0 or 1
+    // Flash the alive LED so we know the system has not crashed
     analogWrite(ALIVE_LED, flasher * ALIVEBRIGHTNESS);
     // Seed random number generator
     randomSeed(counter + flasher);
@@ -123,7 +124,7 @@ void getWeatherData() //client function to send/receive GET request data.
 
   String APIKEY(APIKey);
   String CityID(cityID);
-  if (client.connect(serverName.c_str(), 80)) { // Starts client connection, checks for connection
+  if (client.connect(serverName.c_str(), PORT)) { // Starts client connection, checks for connection
     client.println("GET /data/2.5/forecast?id=" + CityID + "&units=imperial&cnt=1&APPID=" + APIKEY);
     client.println("Host: " + serverName);
     client.println("User-Agent: ArduinoWiFi/1.1");
@@ -230,6 +231,7 @@ void getWeatherData() //client function to send/receive GET request data.
   clearScreen();
 
   if (toggleDisplay) {
+    // Display the aux weather
     printAuxData(location,
                  temperature,
                  humidity,
@@ -244,6 +246,7 @@ void getWeatherData() //client function to send/receive GET request data.
                  timeUTC);
   }
   else {
+    // Display the main weather
     printMainData(humidity,
                   temperature,
                   timeS,
@@ -252,6 +255,7 @@ void getWeatherData() //client function to send/receive GET request data.
   }
 } // void getWeatherData()
 
+// Displays the aux weather
 void printAuxData(String location,
                   String temperature,
                   String humidity,
@@ -333,6 +337,7 @@ void printAuxData(String location,
   tft.println((night) ? "It is Night time" : "It is Day time");
 }
 
+// Displays the main weather
 void printMainData(String humidityString,
                    String temperature,
                    String time,
@@ -459,16 +464,16 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
   }
   else if (time == 0) {
     time += TimeErrorOffset;
-    convertDate(time, &year, &month, &day);
+    convertDate((double)longitude.toFloat(), &year, &month, &day);
   }
   else {
     time += TimeErrorOffset;
   }
+#endif
+
   // Convert UTC time & date to local time & date
   bool DST = convertToLocal(&time, &year, &month,
                             &day, (double)longitude.toFloat(), true); // true means date and DST conversion
-
-#endif
 
   *monthI = month;
   *dayI = day;
@@ -849,12 +854,12 @@ bool convertToLocal(int* hour, int* year, int* month,
   return (DST);
 }
 
-void convertDate(int hour, int* year, int* month, int* day) {
+void convertDate(double lon, int* year, int* month, int* day) {
 
   uint8_t DaysAMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
   if (*year % 4 == 0) DaysAMonth[1] = 29; //leap year check (the simple method)
-  if (hour < 24) {
+  if (round((lon / 15.0d)) < 0.0d) { // East of Greenwich, subtract
     *day -= 1;
     if (*day < 1) {
       if (*month == 1) {
@@ -866,15 +871,15 @@ void convertDate(int hour, int* year, int* month, int* day) {
       }
       *day = DaysAMonth[*month - 1];
     } // if (*day < 1)
-  } // if (*hour < 24)
-  else if (hour >= 24) {
+  } // if (round((lon / 15.0d)) < 0.0d)
+  else { // West of Greenwich, add
     *day += 1;
     if (*day > DaysAMonth[*month - 1]) {
       *day = 1;
       *month += 1;
       if (*month > 12) *year += 1;
     } // if (*day > DaysAMonth[*month - 1])
-  }
+  } // if (round((lon / 15.0d)) < 0.0d)
 }
 
   /*
