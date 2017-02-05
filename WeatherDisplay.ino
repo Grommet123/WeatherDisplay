@@ -293,9 +293,9 @@ void printAuxData(String location,
   }
   lastRandomNumber = randomColor;
   anotherRandomColor = random(maxRandomNumber);
-  // If random number repeats, try again
+  // If random number repeats first random number, try again
   while (anotherRandomColor == randomColor) {
-    randomColor = random(maxRandomNumber);
+    anotherRandomColor = random(maxRandomNumber);
   }
   tft.setTextColor(textColor[randomColor]);
   tft.setTextSize(1);
