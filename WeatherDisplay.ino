@@ -286,20 +286,16 @@ void printAuxData(String location,
 
   // Get random number
   byte maxRandomNumber = sizeof(textColor) / sizeof(unsigned int);
-  randomColor =  random(maxRandomNumber);
+  randomColor = random(maxRandomNumber);
   // If random number repeats, try again
   while (randomColor == lastRandomNumber) {
     randomColor = random(maxRandomNumber);
   }
   lastRandomNumber = randomColor;
-  if (randomColor == 0) {
-    anotherRandomColor = randomColor + 1;
-  }
-  else if (randomColor == 6) {
-    anotherRandomColor = randomColor - 1;
-  }
-  else {
-    anotherRandomColor = randomColor + 1;
+  anotherRandomColor = random(maxRandomNumber);
+  // If random number repeats, try again
+  while (anotherRandomColor == randomColor) {
+    randomColor = random(maxRandomNumber);
   }
   tft.setTextColor(textColor[randomColor]);
   tft.setTextSize(1);
