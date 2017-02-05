@@ -243,7 +243,8 @@ void getWeatherData() //client function to send/receive GET request data.
                  setI,
                  idString.toInt(),
                  dateS,
-                 timeUTC);
+                 timeUTC,
+                 dayI);
   }
   else {
     // Display the main weather
@@ -267,7 +268,8 @@ void printAuxData(String location,
                   int set,
                   int weatherID,
                   String dateS,
-                  String timeUTC)
+                  String timeUTC,
+                  int dayI)
 {
   static long lastRandomNumber;
   long randomColor;
@@ -291,10 +293,10 @@ void printAuxData(String location,
   }
   lastRandomNumber = randomColor;
   if (randomColor == 0) {
-    anotherRandomColor = 1;
+    anotherRandomColor = randomColor + 1;
   }
   else if (randomColor == 6) {
-    anotherRandomColor = 5;
+    anotherRandomColor = randomColor - 1;
   }
   else {
     anotherRandomColor = randomColor + 1;
@@ -335,6 +337,7 @@ void printAuxData(String location,
   tft.print("Sunset: ");
   tft.print(set);
   tft.println(":00pm");
+  tft.println("Today is " + getDayOfWeek(dayI + 1));
   tft.println((night) ? "It is Night time" : "It is Day time");
 }
 
@@ -881,6 +884,25 @@ void convertDate(double lon, int* year, int* month, int* day) {
       if (*month > 12) *year += 1;
     } // if (*day > DaysAMonth[*month - 1])
   } // if (round((lon / 15.0d)) < 0.0d)
+}
+
+// Get the day of the week
+String getDayOfWeek(uint8_t day)
+{
+  String DOW;
+  if (day == 7) day = 0;
+  switch (day)
+  {
+    case 0:  DOW = "Monday"; break;
+    case 1:  DOW = "Tuesday"; break;
+    case 2:  DOW = "Wensday"; break;
+    case 3:  DOW = "Thursday"; break;
+    case 4:  DOW = "Friday"; break;
+    case 5:  DOW = "Saturday" ; break;
+    case 6:  DOW = "Sunday"; break;
+    default: DOW = "Error" ;
+  }
+  return (DOW);
 }
 
   /*
