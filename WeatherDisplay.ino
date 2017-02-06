@@ -146,8 +146,8 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.println("Waiting for data");
 #endif
 
-  while (client.connected() || client.available()) { //connected or data available
-    char c = client.read(); //gets byte from ethernet buffer
+  while (client.connected() && client.available()) { // While connected
+    char c = client.read(); // Gets byte from ethernet buffer
     result = result + c;
   }
 
