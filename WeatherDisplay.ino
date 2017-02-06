@@ -139,7 +139,8 @@ void getWeatherData() //client function to send/receive GET request data.
     return;
   }
 
-  while (client.connected() && !client.available()) delay(1); //waits for data
+// Not sure why this is needed.  It works fine without it
+// while (client.connected() && !client.available()) delay(1); //waits for data
 
 #ifdef DEBUG
   Serial.println("Waiting for data");
@@ -196,6 +197,7 @@ void getWeatherData() //client function to send/receive GET request data.
     temperature.remove(length - 1);
   }
 #ifdef DEBUG
+  Serial.println("Today is " + getDayOfWeek(dayI + 1));
   Serial.print("City ");
   Serial.println(location);
   Serial.print("Weather Icon ID ");
@@ -516,12 +518,6 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
   }
 
 #ifdef DEBUG
-  String riseS = String(*riseI) + ":00" + "am";
-  String setS = String(*setI) + ":00" + "pm";
-  Serial.print("Sunrise ");
-  Serial.println(riseS);
-  Serial.print("Sunset ");
-  Serial.println(setS);
   Serial.println((night) ? "It is Night time" : "It is Day time");
 #endif
 
