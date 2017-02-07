@@ -197,7 +197,7 @@ void getWeatherData() //client function to send/receive GET request data.
     temperature.remove(length - 1);
   }
 #ifdef DEBUG
-  Serial.println("Today is " + getDayOfWeek(dayI + 1));
+  Serial.println("Today is " + getDayOfWeek(dayOfWeek(yearI, monthI, dayI)));
   Serial.print("City ");
   Serial.println(location);
   Serial.print("Weather Icon ID ");
@@ -246,7 +246,9 @@ void getWeatherData() //client function to send/receive GET request data.
                  idString.toInt(),
                  dateS,
                  timeUTC,
-                 dayI);
+                 dayI,
+                 monthI,
+                 yearI);
   }
   else {
     // Display the main weather
@@ -271,7 +273,9 @@ void printAuxData(String location,
                   int weatherID,
                   String dateS,
                   String timeUTC,
-                  int dayI)
+                  int dayI,
+                  int monthI,
+                  int yearI)
 {
   static long lastRandomNumber;
   long randomColor;
@@ -335,7 +339,7 @@ void printAuxData(String location,
   tft.print("Sunset: ");
   tft.print(set);
   tft.println(":00pm");
-  tft.println("Today is " + getDayOfWeek(dayI + 1));
+  tft.println("Today is " + getDayOfWeek(dayOfWeek(yearI, monthI, dayI)));
   tft.println((night) ? "It is Night time" : "It is Day time");
 }
 
