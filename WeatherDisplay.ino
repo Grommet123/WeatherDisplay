@@ -19,8 +19,8 @@
 WiFiClient client;
 String serverName = "api.openweathermap.org"; // Remote server we will connect to
 String result;
-boolean night = false;
-bool toggleDisplay = digitalRead(TOGGLEDISPLAY_SW);
+bool night = false;
+bool toggleDisplay = HIGH;
 bool pastToggleDisplay = toggleDisplay;
 
 Adafruit_ST7735 tft(TFT_CS, TFT_DC, TFT_RST);
@@ -184,11 +184,12 @@ void getWeatherData() //client function to send/receive GET request data.
   String windSpeed = root["list"]["wind"]["speed"];
   String windDirection = root["list"]["wind"]["deg"];
 
+  bool DST = false;
   int riseI, setI, monthI, dayI, yearI;
   String timeUTC = timeS;
   timeUTC = timeUTC.substring(timeUTC.length() - 8, timeUTC.length()); // Strip out the time (XX:XX:XX)
   timeS = convertGMTTimeToLocal(timeS, latitude, longitude,
-                                &riseI, &setI, &monthI, &dayI, &yearI);
+                                &riseI, &setI, &monthI, &dayI, &yearI, &DST);
   String dateS = String(monthI) + '/' + String(dayI) + '/' + String(yearI);
 
   int length = temperature.length();
@@ -197,7 +198,11 @@ void getWeatherData() //client function to send/receive GET request data.
     temperature.remove(length - 1);
   }
 #ifdef DEBUG
+  Serial.println();
+  Serial.println(dateS);
   Serial.println("Today is " + getDayOfWeek(dayOfWeek(yearI, monthI, dayI)));
+  Serial.println((DST) ? "It's DST" : "It's ST");
+  Serial.println((night) ? "It is Night time" : "It is Day time");
   Serial.print("City ");
   Serial.println(location);
   Serial.print("Weather Icon ID ");
@@ -248,7 +253,8 @@ void getWeatherData() //client function to send/receive GET request data.
                  timeUTC,
                  dayI,
                  monthI,
-                 yearI);
+                 yearI,
+                 DST);
   }
   else {
     // Display the main weather
@@ -275,7 +281,8 @@ void printAuxData(String location,
                   String timeUTC,
                   int dayI,
                   int monthI,
-                  int yearI)
+                  int yearI,
+                  bool DST)
 {
   static long lastRandomNumber;
   long randomColor;
@@ -339,6 +346,7 @@ void printAuxData(String location,
   tft.print("Sunset: ");
   tft.print(set);
   tft.println(":00pm");
+  tft.println((DST) ? "It's DST" : "It's ST");
   tft.println("Today is " + getDayOfWeek(dayOfWeek(yearI, monthI, dayI)));
   tft.println((night) ? "It is Night time" : "It is Day time");
 }
@@ -445,7 +453,7 @@ void printWeatherIcon(int id)
 }
 
 String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
-                             int* riseI, int* setI, int* monthI, int* dayI, int* yearI)
+                             int* riseI, int* setI, int* monthI, int* dayI, int* yearI, bool* DST)
 {
   double rise, set;
 
@@ -478,22 +486,12 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
 #endif
 
   // Convert UTC time & date to local time & date
-  bool DST = convertToLocal(&time, &year, &month,
-                            &day, (double)longitude.toFloat(), true); // true means date and DST conversion
+  *DST = convertToLocal(&time, &year, &month,
+                        &day, (double)longitude.toFloat(), true); // true means date and DST conversion
 
   *monthI = month;
   *dayI = day;
   *yearI = year;
-
-#ifdef DEBUG
-  Serial.print("\nDate ");
-  Serial.print(month);
-  Serial.print("/");
-  Serial.print(day);
-  Serial.print("/");
-  Serial.println(year);
-  Serial.println((DST) ? "It's DST" : "It's ST");
-#endif
 
   // Get sunrise and sunset time in UTC
   int rs = sun_rise_set(year, month, day,
@@ -504,12 +502,12 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
   *setI = (int)round(set);
 
   // Convert UTC sunrise time to local sunrise time
-  bool notUsed1 = convertToLocal(riseI, &year, &month,
-                                 &day, (double)longitude.toFloat(), false); // false means no date or DST conversion
+  (void) convertToLocal(riseI, &year, &month,
+                        &day, (double)longitude.toFloat(), false); // false means no date or DST conversion
 
   // Convert UTC sunset time to local sunset time
-  bool notUsed2 = convertToLocal(setI, &year, &month,
-                                 &day, (double)longitude.toFloat(), false); // false means no date or DST conversion
+  (void) convertToLocal(setI, &year, &month,
+                        &day, (double)longitude.toFloat(), false); // false means no date or DST conversion
 
   // Determine night or day
   night = (time > *setI ||  time < *riseI);
@@ -520,10 +518,6 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
   if (*setI >= 12) { // Convert to 12 hour format
     if (*setI > 12) *setI -= 12;
   }
-
-#ifdef DEBUG
-  Serial.println((night) ? "It is Night time" : "It is Day time");
-#endif
 
   char AMPM[] = "am";
   if (time >= 12) { // Convert to 12 hour format
