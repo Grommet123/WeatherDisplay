@@ -8,7 +8,7 @@
 #define WeatherDisplay_h
 #include <Arduino.h>
 
-#define VERSION  "5.0"         // Version number
+#define VERSION  "5.1"         // Version number
 #define GETDATACOUNT 60 * 30   // Time to get more data (in seconds)
 #define PORT 80                // Port number of remote server
 #define ERROROFFSET            // Add time/date error offset
@@ -16,7 +16,7 @@
 #define TOGGLEDISPLAY_SW D1    // Toggle display switch
 #define ALIVE_LED D3           // Flashes to indicate that the system is alive
 #define ALIVEBRIGHTNESS 150    // Brightness of the alive LED
-//#define DEBUG                  // Display debug data
+//#define DEBUG                // Display debug data
 
 // Color definitions
 #define BLACK    0x0000
