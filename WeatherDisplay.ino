@@ -139,14 +139,13 @@ void getWeatherData() //client function to send/receive GET request data.
     return;
   }
 
-  // Not sure why this is needed.  It works fine without it
-  // while (client.connected() && !client.available()) delay(1); //waits for data
+  while (client.connected() && !client.available()) delay(1); //waits for data
 
 #ifdef DEBUG
   Serial.println("Waiting for data");
 #endif
 
-  while (client.connected() && client.available()) { // While connected
+  while (client.connected() || client.available()) { //connected or data available
     char c = client.read(); // Gets byte from WIFI buffer
     result = result + c;
   }
