@@ -97,9 +97,14 @@ void loop() {
 
   if (counter >= GETDATACOUNT) //Get new data
   {
-    counter = 0;
-    getWeatherData();
-
+    // If we lost WiFi connection (it sometimes happens), restart the nodeMCU
+    if (WiFi.status() != WL_CONNECTED) {
+      ESP.restart();
+    }
+    else {
+      counter = 0;
+      getWeatherData();
+    }
   }
   else {
     counter++;
@@ -927,8 +932,8 @@ String getDayOfWeek(uint8_t day)
 }
 
 /*
- Computes Sun rise/set times, start/end of twilight, and
- the length of the day at any date and latitude
+  Computes Sun rise/set times, start/end of twilight, and
+  the length of the day at any date and latitude
 
   Written as DAYLEN.C, 1989-08-16
 
