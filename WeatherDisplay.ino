@@ -266,7 +266,8 @@ void getWeatherData() //client function to send/receive GET request data.
                   temperature,
                   timeS,
                   idString.toInt(),
-                  dateS);
+                  dateS,
+                  description);
   }
 } // void getWeatherData()
 
@@ -392,11 +393,15 @@ void printMainData(String humidityString,
                    String temperature,
                    String time,
                    int weatherID,
-                   String dateS)
+                   String dateS,
+                   String description)
 {
+  byte maxLeghtOfRow;
+  
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  tft.setCursor(17, 5);
+  maxLeghtOfRow = std::min((int)sizeof("Updated ") + (int)time.length(), 22); // Limit characters
+  tft.setCursor((11 - (maxLeghtOfRow / 2)) * 4, 5); // Center text
   tft.print("Updated " + time);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
@@ -409,6 +414,11 @@ void printMainData(String humidityString,
 
   printWeatherIcon(weatherID);
 
+  tft.setTextColor(YELLOW);
+  tft.setTextSize(1);
+  maxLeghtOfRow = std::min((int)description.length(), 22); // Limit characters
+  tft.setCursor((11 - (maxLeghtOfRow / 2)) * 4, 120); // Center text
+  tft.print(description);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.setCursor(27, 132);
@@ -416,7 +426,8 @@ void printMainData(String humidityString,
   tft.print("% RH");
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  tft.setCursor(40, 150);
+  maxLeghtOfRow = std::min((int)dateS.length(), 22); // Limit characters
+  tft.setCursor((11 - (maxLeghtOfRow / 2)) * 4, 150); // Center text
   tft.print(dateS);
 }
 
