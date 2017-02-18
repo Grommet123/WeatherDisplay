@@ -48,16 +48,24 @@ void setup() {
 #ifdef DEBUG
   Serial.println("Connecting");
 #endif
+  byte maxLeghtOfParam;
+
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  tft.setCursor(30, 5);
+  maxLeghtOfParam = std::min((int)sizeof("Version ") + (int)sizeof(VERSION), 22); // Limit characters
+  tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 5); // Center text
   tft.print("Version ");
   tft.print(VERSION);
-  tft.setCursor(30, 15);
+  maxLeghtOfParam = std::min((int)sizeof(CREDIT), 22); // Limit characters
+  tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 15); // Center text
   tft.print(CREDIT);
-  tft.setCursor(30, 80);
   tft.setTextColor(WHITE);
-  tft.print("Connecting...");
+  maxLeghtOfParam = std::min((int)sizeof("Connecting to"), 22); // Limit characters
+  tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 80); // Center text
+  tft.print("Connecting to");
+  maxLeghtOfParam = std::min((int)sizeof(ssid), 22); // Limit characters
+  tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 90); // Center text
+  tft.print(ssid);
 
   int startCounter = 0;
 
@@ -70,7 +78,10 @@ void setup() {
     startCounter++;
     tft.setTextSize(1);
     tft.setTextColor(YELLOW);
-    if (startCounter <= 1) tft.setCursor(20, 100);
+    if (startCounter <= 1) {
+      maxLeghtOfParam = std::min((int)sizeof("          "), 22); // Limit characters
+      tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 110); // Center text
+    }
     tft.print(startCounter);
     if (startCounter >= 10) {
 #ifdef DEBUG
@@ -396,12 +407,12 @@ void printMainData(String humidityString,
                    String dateS,
                    String description)
 {
-  byte maxLeghtOfRow;
-  
+  byte maxLeghtOfParam;
+
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  maxLeghtOfRow = std::min((int)sizeof("Updated ") + (int)time.length(), 22); // Limit characters
-  tft.setCursor((11 - (maxLeghtOfRow / 2)) * 4, 5); // Center text
+  maxLeghtOfParam = std::min((int)sizeof("Updated ") + (int)time.length(), 22); // Limit characters
+  tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 5); // Center text
   tft.print("Updated " + time);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
@@ -416,8 +427,8 @@ void printMainData(String humidityString,
 
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  maxLeghtOfRow = std::min((int)description.length(), 22); // Limit characters
-  tft.setCursor((11 - (maxLeghtOfRow / 2)) * 4, 120); // Center text
+  maxLeghtOfParam = std::min((int)description.length(), 22); // Limit characters
+  tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 120); // Center text
   tft.print(description);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
@@ -426,8 +437,8 @@ void printMainData(String humidityString,
   tft.print("% RH");
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  maxLeghtOfRow = std::min((int)dateS.length(), 22); // Limit characters
-  tft.setCursor((11 - (maxLeghtOfRow / 2)) * 4, 150); // Center text
+  maxLeghtOfParam = std::min((int)dateS.length(), 22); // Limit characters
+  tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 150); // Center text
   tft.print(dateS);
 }
 
