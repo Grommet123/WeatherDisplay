@@ -5,9 +5,6 @@
 //     Based on the following:                                       //
 // http://educ8s.tv/art-deco-weather-forecast-display/               //
 //                                                                   //
-//     See the following for a description on JSON decoding:         //                                                    //
-// https://www.arduino.cc/en/Tutorial.WiFi101WeatherAudioNotifier    //
-//                                                                   //
 ///////////////////////////////////////////////////////////////////////
 
 #include "WeatherDisplay.h"
@@ -108,14 +105,8 @@ void loop() {
 
   if (counter >= GETDATACOUNT) //Get new data
   {
-    // If we lost WiFi connection (it sometimes happens), restart the nodeMCU
-    if (WiFi.status() != WL_CONNECTED) {
-      ESP.restart();
-    }
-    else {
-      counter = 0;
-      getWeatherData();
-    }
+    counter = 0;
+    getWeatherData();
   }
   else {
     counter++;
@@ -130,7 +121,7 @@ void loop() {
     Serial.println(counter);
 #endif
   }
-}
+} // loop
 
 void getWeatherData() //client function to send/receive GET request data.
 {
@@ -165,14 +156,16 @@ void getWeatherData() //client function to send/receive GET request data.
     char c = client.read(); // Gets byte from WIFI buffer
     result = result + c;
   }
-
   client.stop(); //stop client
-  result.replace('[', ' ');
-  result.replace(']', ' ');
+
 #ifdef DEBUG
   Serial.println(result);
 #endif
+  result.replace('[', ' ');
+  result.replace(']', ' ');
 
+// See the following for a description on JSON decoding:
+// https://www.arduino.cc/en/Tutorial.WiFi101WeatherAudioNotifier
   char jsonArray [result.length() + 1];
   result.toCharArray(jsonArray, sizeof(jsonArray));
   jsonArray[result.length() + 1] = '\0';
