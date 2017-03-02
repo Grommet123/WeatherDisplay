@@ -159,7 +159,7 @@ void getWeatherData() //client function to send/receive GET request data.
   client.stop(); //stop client
 
 #ifdef DEBUG
-  Serial.println(result);
+  Serial.println(result); // Print out the JSON data
 #endif
   result.replace('[', ' ');
   result.replace(']', ' ');
@@ -270,13 +270,10 @@ void getWeatherData() //client function to send/receive GET request data.
                   temperature,
                   timeS,
                   idString.toInt(),
-#ifdef DISPLAYDATE // Display the date
                   dateS,
-#else              // Display the day of week
                   dayI,
                   monthI,
                   yearI,
-#endif
                   description);
   }
 } // void getWeatherData()
@@ -399,25 +396,16 @@ void printAuxData(String location,
 }
 
 // Displays the main weather
-#ifdef DISPLAYDATE // Dislpays the date
 void printMainData(String humidityString,
                    String temperature,
                    String time,
                    int weatherID,
                    String dateS,
-                   String description)
-{
-#else // Dislpays the day of week
-void printMainData(String humidityString,
-                   String temperature,
-                   String time,
-                   int weatherID,
                    int dayI,
                    int monthI,
                    int yearI,
                    String description)
 {
-#endif
   byte maxLeghtOfParam;
 
   tft.setTextColor(YELLOW);
@@ -448,16 +436,13 @@ void printMainData(String humidityString,
   tft.print("% RH");
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-#ifdef DISPLAYDATE // Dislpays the date
   maxLeghtOfParam = std::min((int)dateS.length(), 22); // Limit characters
-  tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 150); // Center text
-  tft.print(dateS);
-#else // Dislpays the day of week
   String theDayOfWeek = getDayOfWeek(dayOfWeek(yearI, monthI, dayI));
-  maxLeghtOfParam = std::min((int)theDayOfWeek.length(), 22); // Limit characters
+  maxLeghtOfParam = maxLeghtOfParam + std::min((int)theDayOfWeek.length() + 1, 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 150); // Center text
   tft.print(theDayOfWeek);
-#endif
+  tft.print(" ");
+  tft.print(dateS);
 }
 
 void printWeatherIcon(int id)
