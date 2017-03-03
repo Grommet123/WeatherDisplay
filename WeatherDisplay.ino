@@ -117,7 +117,7 @@ void loop() {
     randomSeed(counter + flasher);
     delay(1000);
 #ifdef DEBUG
-    Serial.print("counter = ");
+    Serial.print("Counter = ");
     Serial.println(counter);
 #endif
   }
@@ -438,11 +438,9 @@ void printMainData(String humidityString,
   tft.setTextSize(1);
   maxLeghtOfParam = std::min((int)dateS.length(), 22); // Limit characters
   String theDayOfWeek = getDayOfWeek(dayOfWeek(yearI, monthI, dayI));
-  maxLeghtOfParam = maxLeghtOfParam + std::min((int)theDayOfWeek.length() + 1, 22); // Limit characters
+  maxLeghtOfParam += std::min((int)theDayOfWeek.length() + 1, 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 150); // Center text
-  tft.print(theDayOfWeek);
-  tft.print(" ");
-  tft.print(dateS);
+  tft.print(theDayOfWeek + " " + dateS);
 }
 
 void printWeatherIcon(int id)
