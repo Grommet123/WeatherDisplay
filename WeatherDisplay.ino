@@ -274,7 +274,8 @@ void getWeatherData() //client function to send/receive GET request data.
                   dayI,
                   monthI,
                   yearI,
-                  description);
+                  description,
+                  DST);
   }
 } // void getWeatherData()
 
@@ -404,15 +405,19 @@ void printMainData(String humidityString,
                    int dayI,
                    int monthI,
                    int yearI,
-                   String description)
+                   String description,
+                   bool DST)
 {
   byte maxLeghtOfParam;
+  String isDST;
 
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  maxLeghtOfParam = std::min((int)sizeof("Updated ") + (int)time.length(), 22); // Limit characters
+  
+  (DST) ? isDST = " DST" : isDST = " ST";
+  maxLeghtOfParam = std::min((int)sizeof("LU ") + (int)time.length() + (int)isDST.length(), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 5); // Center text
-  tft.print("Updated " + time);
+  tft.print("LU " + time + isDST);
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
   tft.setCursor(27, 20);
