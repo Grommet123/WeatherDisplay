@@ -39,7 +39,7 @@ void setup() {
   pinMode(TOGGLEDISPLAY_SW, INPUT);
   pinMode(ALIVE_LED, OUTPUT);
 
-  tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
+  tft.initR(INITR_BLACKTAB);   // initialize the ST7735S chip, black tab
   tft.fillScreen(BLACK);
 
 #ifdef DEBUG
@@ -49,24 +49,24 @@ void setup() {
 
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  maxLeghtOfParam = std::min((int)sizeof("Version ") + (int)sizeof(VERSION), 22); // Limit characters
+  maxLeghtOfParam = min((int)sizeof("Version ") + (int)sizeof(VERSION), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 5); // Center text
   tft.print("Version ");
   tft.print(VERSION);
-  maxLeghtOfParam = std::min((int)sizeof(CREDIT), 22); // Limit characters
+  maxLeghtOfParam = min((int)sizeof(CREDIT), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 15); // Center text
   tft.print(CREDIT);
   tft.setTextColor(WHITE);
-  maxLeghtOfParam = std::min((int)sizeof("Connecting to"), 22); // Limit characters
+  maxLeghtOfParam = min((int)sizeof("Connecting to"), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 80); // Center text
   tft.print("Connecting to");
-  maxLeghtOfParam = std::min((int)sizeof(ssid), 22); // Limit characters
+  maxLeghtOfParam = min((int)sizeof(ssid), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 90); // Center text
   tft.print(ssid);
 
   int startCounter = 0;
 
-  WiFi.mode(WIFI_STA);
+//  WiFi.mode(WIFI_STA);
   WiFi.begin (ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
 #ifdef DEBUG
@@ -76,7 +76,7 @@ void setup() {
     tft.setTextSize(1);
     tft.setTextColor(YELLOW);
     if (startCounter <= 1) {
-      maxLeghtOfParam = std::min((int)sizeof("          "), 22); // Limit characters
+      maxLeghtOfParam = min((int)sizeof("          "), 22); // Limit characters
       tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 110); // Center text
     }
     tft.print(startCounter);
@@ -169,7 +169,7 @@ void getWeatherData() //client function to send/receive GET request data.
   char jsonArray [result.length() + 1];
   result.toCharArray(jsonArray, sizeof(jsonArray));
   jsonArray[result.length() + 1] = '\0';
-
+// For this to work use ArduinoJson version 5
   StaticJsonBuffer<1024> json_buf;
   JsonObject &root = json_buf.parseObject(jsonArray);
   if (!root.success())
@@ -415,7 +415,7 @@ void printMainData(String humidityString,
   tft.setTextSize(1);
   
   (DST) ? isDST = " DST" : isDST = " ST";
-  maxLeghtOfParam = std::min((int)sizeof("LU ") + (int)time.length() + (int)isDST.length(), 22); // Limit characters
+  maxLeghtOfParam = min((int)sizeof("LU ") + (int)time.length() + (int)isDST.length(), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 5); // Center text
   tft.print("LU " + time + isDST);
   tft.setTextColor(WHITE);
@@ -431,7 +431,7 @@ void printMainData(String humidityString,
 
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  maxLeghtOfParam = std::min((int)description.length(), 22); // Limit characters
+  maxLeghtOfParam = min((int)description.length(), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 120); // Center text
   tft.print(description);
   tft.setTextColor(WHITE);
@@ -441,9 +441,9 @@ void printMainData(String humidityString,
   tft.print("% RH");
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  maxLeghtOfParam = std::min((int)dateS.length(), 22); // Limit characters
+  maxLeghtOfParam = min((int)dateS.length(), 22); // Limit characters
   String theDayOfWeek = getDayOfWeek(dayOfWeek(yearI, monthI, dayI));
-  maxLeghtOfParam += std::min((int)theDayOfWeek.length() + 1, 22); // Limit characters
+  maxLeghtOfParam += min((int)theDayOfWeek.length() + 1, 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 150); // Center text
   tft.print(theDayOfWeek + " " + dateS);
 }
