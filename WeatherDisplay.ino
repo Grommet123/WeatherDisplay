@@ -9,19 +9,20 @@
 
 #include "WeatherDisplay.h"
 #include <ESP8266WiFi.h>
-#include <ArduinoJson.h>
+#include <ArduinoJson.h> // Use ArduinoJson version 5
 #include <Adafruit_ST7735.h>
 #include <Adafruit_GFX.h>
 
-WiFiClient client;
+WiFiClient client; // WIFI client object
 String serverName = "api.openweathermap.org"; // Remote server we will connect to
-String result;
+String result; // WIFI buffer from NodeMCU ESP12E
 bool night = false;
 bool toggleDisplay = HIGH;
 bool pastToggleDisplay = !toggleDisplay;
 
-Adafruit_ST7735 tft(TFT_CS, TFT_DC, TFT_RST);
+Adafruit_ST7735 tft(TFT_CS, TFT_DC, TFT_RST); // TFT display object
 
+// Icon data (from WeatherIcons.c) for TFT display
 extern unsigned char cloud[];
 extern unsigned char thunder[];
 extern unsigned char wind[];
@@ -66,7 +67,6 @@ void setup() {
 
   int startCounter = 0;
 
-//  WiFi.mode(WIFI_STA);
   WiFi.begin (ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
 #ifdef DEBUG
@@ -169,7 +169,6 @@ void getWeatherData() //client function to send/receive GET request data.
   char jsonArray [result.length() + 1];
   result.toCharArray(jsonArray, sizeof(jsonArray));
   jsonArray[result.length() + 1] = '\0';
-// For this to work use ArduinoJson version 5
   StaticJsonBuffer<1024> json_buf;
   JsonObject &root = json_buf.parseObject(jsonArray);
   if (!root.success())
