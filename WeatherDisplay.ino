@@ -9,7 +9,7 @@
 
 #include "WeatherDisplay.h"
 #include <ESP8266WiFi.h>
-#include <ArduinoJson.h> // Use ArduinoJson version 5
+#include <ArduinoJson.h>
 #include <Adafruit_ST7735.h>
 #include <Adafruit_GFX.h>
 
@@ -129,8 +129,8 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.println("Getting Weather Data");
 #endif
 
-  String APIKEY(APIKey);
-  String CityID(cityID);
+  String APIKEY(APIKey); // openweathermap.org API key
+  String CityID(cityID); // openweathermap.org city
   if (client.connect(serverName.c_str(), PORT)) { // Starts client connection, checks for connection
     client.println("GET /data/2.5/forecast?id=" + CityID + "&units=imperial&cnt=1&APPID=" + APIKEY);
     client.println("Host: " + serverName);
@@ -164,11 +164,27 @@ void getWeatherData() //client function to send/receive GET request data.
   result.replace('[', ' ');
   result.replace(']', ' ');
 
-// See the following for a description on JSON decoding:
-// https://www.arduino.cc/en/Tutorial.WiFi101WeatherAudioNotifier
+  // See the following for a description on JSON decoding:
+  // https://www.arduino.cc/en/Tutorial.WiFi101WeatherAudioNotifier
   char jsonArray [result.length() + 1];
   result.toCharArray(jsonArray, sizeof(jsonArray));
   jsonArray[result.length() + 1] = '\0';
+#ifdef ArduinoJsonVer // Version 6
+  DynamicJsonDocument doc(1024);
+  deserializeJson(doc, jsonArray);
+
+  String location = doc["city"]["name"];
+  String temperature = doc["list"]["main"]["temp"];
+  String humidity = doc["list"]["main"]["humidity"];
+  String weather = doc["list"]["weather"]["main"];
+  String description = doc["list"]["weather"]["description"];
+  String idString = doc["list"]["weather"]["id"];
+  String timeS = doc["list"]["dt_txt"];
+  String latitude = doc["city"]["coord"]["lat"];
+  String longitude = doc["city"]["coord"]["lon"];
+  String windSpeed = doc["list"]["wind"]["speed"];
+  String windDirection = doc["list"]["wind"]["deg"];
+#else // Version 5
   StaticJsonBuffer<1024> json_buf;
   JsonObject &root = json_buf.parseObject(jsonArray);
   if (!root.success())
@@ -178,7 +194,6 @@ void getWeatherData() //client function to send/receive GET request data.
 #endif
     return;
   }
-
   String location = root["city"]["name"];
   String temperature = root["list"]["main"]["temp"];
   String humidity = root["list"]["main"]["humidity"];
@@ -190,7 +205,7 @@ void getWeatherData() //client function to send/receive GET request data.
   String longitude = root["city"]["coord"]["lon"];
   String windSpeed = root["list"]["wind"]["speed"];
   String windDirection = root["list"]["wind"]["deg"];
-
+#endif // Version 5 or 6
   bool DST = false;
   int riseI, setI, monthI, dayI, yearI;
   String timeUTC = timeS;
@@ -412,7 +427,7 @@ void printMainData(String humidityString,
 
   tft.setTextColor(YELLOW);
   tft.setTextSize(1);
-  
+
   (DST) ? isDST = " DST" : isDST = " ST";
   maxLeghtOfParam = min((int)sizeof("LU ") + (int)time.length() + (int)isDST.length(), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 5); // Center text
