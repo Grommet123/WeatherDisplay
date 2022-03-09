@@ -8,16 +8,19 @@
 #define WeatherDisplay_h
 #include <Arduino.h>
 
-#define VERSION  "10.0"        // Version number
-#define GETDATACOUNT 60 * 30   // Time to get more data (in seconds)
+#define VERSION  "10.1"        // Version number
+#define GETDATACOUNT 60 * 30   // Time to get more data (in minutes)
 #define PORT 80                // Port number of remote server
 #define ERROROFFSET            // Add time/date error offset
 #define CREDIT "GK Grotsky"    // Yours truly :-)
 #define TOGGLEDISPLAY_SW D1    // Toggle display switch
-#define ALIVE_LED D3           // Flashes to indicate that the system is alive
+#define ALIVE_LED D2           // Flashes to indicate that the system is alive
 #define ALIVEBRIGHTNESS 150    // Brightness of the alive LED
 #define ArduinoJsonVer         // ArduinoJson version 5 or 6 (comment out for version 5)
-//#define DEBUG                // Display debug data
+#define TFT_CS   D8
+#define TFT_DC   D4
+#define TFT_RST  D0
+#define DEBUG                // Display debug data
 
 // Color definitions
 #define BLACK    0x0000
@@ -29,24 +32,6 @@
 #define YELLOW   0xFFE0
 #define WHITE    0xFFFF
 #define GREY     0xC618
-
-/*
-  D0   = 16;
-  D1   = 5;
-  D2   = 4;
-  D3   = 0;
-  D4   = 2;
-  D5   = 14;
-  D6   = 12;
-  D7   = 13;
-  D8   = 15;
-  D9   = 3;
-  D10  = 1;
-*/
-
-#define TFT_CS   D8
-#define TFT_DC   D4
-#define TFT_RST  D0
 
 /* A macro to compute the number of days elapsed since 2000 Jan 0.0 */
 /* (which is equal to 1999 Dec 31, 0h UT)                           */

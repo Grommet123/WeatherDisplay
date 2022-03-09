@@ -117,8 +117,10 @@ void loop() {
     randomSeed(counter + flasher);
     delay(1000);
 #ifdef DEBUG
-    Serial.print("Counter = ");
-    Serial.println(counter);
+    if (counter % 60 == 0) { // Once per minutes
+      Serial.print("Counter = ");
+      Serial.println(counter);
+    }
 #endif
   }
 } // loop
@@ -135,8 +137,8 @@ void getWeatherData() //client function to send/receive GET request data.
     client.println("GET /data/2.5/forecast?id=" + CityID + "&units=imperial&cnt=1&APPID=" + APIKEY);
     client.println("Host: " + serverName);
     client.println("User-Agent: ArduinoWiFi/1.1");
-    client.println("Connection: close");
-    client.println();
+    client.println("Connection: close");  //Close 1.1 persistent connection
+    client.println();  //End of get request
   }
   else {
 #ifdef DEBUG
