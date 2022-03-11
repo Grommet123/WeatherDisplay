@@ -37,6 +37,7 @@ void setup() {
 #ifdef DEBUG
   Serial.begin(9600);
 #endif
+
   pinMode(TOGGLEDISPLAY_SW, INPUT);
   pinMode(ALIVE_LED, OUTPUT);
 
@@ -118,8 +119,15 @@ void loop() {
     delay(1000);
 #ifdef DEBUG
     if (counter % 60 == 0) { // Once per minutes
-      Serial.print("Counter = ");
-      Serial.println(counter);
+      int count = counter / 60;
+      Serial.print("Time since last update = ");
+      Serial.print(count);
+      if ((count) > 1) {
+        Serial.println(" minutes");
+      }
+      else {
+        Serial.println(" minute");
+      }
     }
 #endif
   }
@@ -533,7 +541,7 @@ void printWeatherIcon(int id)
 }
 
 String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
-                             int* riseI, int* setI, int* monthI, int* dayI, int* yearI, bool* DST)
+                             int* riseI, int* setI, int* monthI, int* dayI, int* yearI, bool * DST)
 {
   double rise, set;
 

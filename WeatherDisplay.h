@@ -8,7 +8,7 @@
 #define WeatherDisplay_h
 #include <Arduino.h>
 
-#define VERSION  "10.1"        // Version number
+#define VERSION  "10.2"        // Version number
 #define GETDATACOUNT 60 * 30   // Time to get more data (in minutes)
 #define PORT 80                // Port number of remote server
 #define ERROROFFSET            // Add time/date error offset
@@ -17,9 +17,9 @@
 #define ALIVE_LED D2           // Flashes to indicate that the system is alive
 #define ALIVEBRIGHTNESS 150    // Brightness of the alive LED
 #define ArduinoJsonVer         // ArduinoJson version 5 or 6 (comment out for version 5)
-#define TFT_CS   D8
-#define TFT_DC   D4
-#define TFT_RST  D0
+#define TFT_CS   D8            // TFT chip select pin
+#define TFT_DC   D4            // TFT AO/DC pin
+#define TFT_RST  D0            // TFT reset pin
 #define DEBUG                // Display debug data
 
 // Color definitions
