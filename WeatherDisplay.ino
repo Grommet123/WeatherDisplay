@@ -5,6 +5,8 @@
 //     Based on the following:                                       //
 // http://educ8s.tv/art-deco-weather-forecast-display/               //
 //                                                                   //
+// https://github.com/Grommet123/WeatherDisplay                      //
+//                                                                   //
 ///////////////////////////////////////////////////////////////////////
 
 #include "WeatherDisplay.h"
@@ -123,11 +125,13 @@ void loop() {
       Serial.print("Time since last update = ");
       Serial.print(count);
       if ((count) > 1) {
-        Serial.println(" minutes");
+        Serial.print(" minutes");
       }
       else {
-        Serial.println(" minute");
+        Serial.print(" minute");
       }
+      Serial.print(" out of ");
+      Serial.println(GETDATACOUNT / 60);
     }
 #endif
   }
