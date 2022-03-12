@@ -149,8 +149,8 @@ void getWeatherData() //client function to send/receive GET request data.
     client.println("GET /data/2.5/forecast?id=" + CityID + "&units=imperial&cnt=1&APPID=" + APIKEY);
     client.println("Host: " + serverName);
     client.println("User-Agent: ArduinoWiFi/1.1");
-    client.println("Connection: close");  //Close 1.1 persistent connection
-    client.println();  //End of get request
+    client.println("Connection: close");  // Close 1.1 persistent connection
+    client.println();  // End of get request
   }
   else {
 #ifdef DEBUG
@@ -173,7 +173,8 @@ void getWeatherData() //client function to send/receive GET request data.
   client.stop(); //stop client
 
 #ifdef DEBUG
-  Serial.println(result); // Print out the JSON data
+  Serial.println("Printing JSON data..."); // Print out the JSON data
+  Serial.println(result);
 #endif
   result.replace('[', ' ');
   result.replace(']', ' ');
