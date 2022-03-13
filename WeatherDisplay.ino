@@ -173,8 +173,9 @@ void getWeatherData() //client function to send/receive GET request data.
   client.stop(); //stop client
 
 #ifdef DEBUG
-  Serial.println("Printing JSON data..."); // Print out the JSON data
-  Serial.println(result);
+  Serial.println("Received data");
+  Serial.println("Printing JSON data...");
+  Serial.println(result); // Print out the JSON data
 #endif
   result.replace('[', ' ');
   result.replace(']', ' ');
