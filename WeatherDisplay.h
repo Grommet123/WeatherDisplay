@@ -8,8 +8,8 @@
 #define WeatherDisplay_h
 #include <Arduino.h>
 
-#define VERSION  "10.4"        // Version number
-#define GETDATACOUNT 60 * 180  // Time to get more data (in seconds)
+#define VERSION  "10.5"        // Version number
+#define GETDATACOUNT 60 * 60   // Time to get more data (in seconds)
 #define PORT 80                // Port number of remote server
 #define ERROROFFSET            // Add time/date error offset
 #define CREDIT "GK Grotsky"    // Yours truly :-)
