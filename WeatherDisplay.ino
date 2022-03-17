@@ -167,7 +167,7 @@ void getWeatherData() //client function to send/receive GET request data.
 #endif
 
   while (client.connected() || client.available()) { //connected or data available
-    char c = client.read(); // Gets byte from WIFI buffer
+    char c = client.read(); // Gets JSON data from WIFI buffer
     result = result + c;
   }
   client.stop(); //stop client
@@ -547,7 +547,7 @@ void printWeatherIcon(int id)
 }
 
 String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
-                             int* riseI, int* setI, int* monthI, int* dayI, int* yearI, bool * DST)
+                             int* riseI, int* setI, int* monthI, int* dayI, int* yearI, bool* DST)
 {
   double rise, set;
 
@@ -595,13 +595,13 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
   *riseI = (int)round(rise);
   *setI = (int)round(set);
 
-  // Convert UTC sunrise time to local sunrise time
+  // Convert UTC "sunrise" time to local "sunrise" time
   (void) convertToLocal(riseI, &year, &month,
-                        &day, (double)longitude.toFloat(), false); // false means no date or DST conversion
+                        &day, (double)longitude.toFloat(), true); // true means date and DST conversion
 
-  // Convert UTC sunset time to local sunset time
+  // Convert UTC "sunset" time to local "sunset" time
   (void) convertToLocal(setI, &year, &month,
-                        &day, (double)longitude.toFloat(), false); // false means no date or DST conversion
+                        &day, (double)longitude.toFloat(), true); // true means date and DST conversion
 
   // Determine night or day
   night = (time > *setI ||  time < *riseI);
