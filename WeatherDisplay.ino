@@ -181,7 +181,7 @@ void getWeatherData() //client function to send/receive GET request data.
   result.replace(']', ' ');
 
   // See the following for a description on JSON decoding:
-  // https://www.arduino.cc/en/Tutorial.WiFi101WeatherAudioNotifier
+  // https://randomnerdtutorials.com/decoding-and-encoding-json-with-arduino-or-esp8266/
   char jsonArray [result.length() + 1];
   result.toCharArray(jsonArray, sizeof(jsonArray));
   jsonArray[result.length() + 1] = '\0';
@@ -250,7 +250,7 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.print("Description ");
   Serial.println(description);
   Serial.print("Temperature ");
-  Serial.println(temperature + "f");
+  Serial.println(temperature + " f");
   Serial.print("Humidity ");
   Serial.println(humidity + "% RH");
   Serial.print("Wind speed  ");
@@ -274,7 +274,6 @@ void getWeatherData() //client function to send/receive GET request data.
 #endif // #ifdef DEBUG
 
   clearScreen();
-
   if (toggleDisplay) {
     // Display the aux weather
     printAuxData(location,
@@ -850,6 +849,10 @@ uint8_t dayOfWeek(uint16_t year, uint8_t month, uint8_t day)
 */
 bool IsDST(uint8_t day, uint8_t month , uint8_t DOW)
 {
+  // When and if permanent DST takes affect
+#ifdef PERMANENT_DST
+  return true;
+#else
   // Make Day of Week (DOW) match with what Stackoverflow suggests
   // for DOW (Sunday = 0 to Saturday = 6)
   switch (DOW)
@@ -879,6 +882,7 @@ bool IsDST(uint8_t day, uint8_t month , uint8_t DOW)
   // In November we must be before the first Sunday to be DST
   // That means the previous Sunday must be before the 1st
   return previousSunday <= 0;
+#endif // #ifdef PERMANENT_DTS
 }
 
 /* Convert UTC time and date to local time and date
