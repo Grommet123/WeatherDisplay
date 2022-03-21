@@ -849,7 +849,7 @@ uint8_t dayOfWeek(uint16_t year, uint8_t month, uint8_t day)
 */
 bool IsDST(uint8_t day, uint8_t month , uint8_t DOW)
 {
-  // When and if permanent DST takes affect
+  // If and when permanent DST takes affect
 #ifdef PERMANENT_DST
   return true;
 #else
