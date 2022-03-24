@@ -14,6 +14,7 @@
 #include <ArduinoJson.h>
 #include <Adafruit_ST7735.h>
 #include <Adafruit_GFX.h>
+#include <Math.h>
 
 WiFiClient client; // WIFI client object
 String serverName = "api.openweathermap.org"; // Remote server we will connect to
@@ -236,6 +237,25 @@ void getWeatherData() //client function to send/receive GET request data.
     temperature.remove(length - 1);
   }
 #ifdef DEBUG
+  String latitudeS = latitude;
+  String longitudeS = longitude;
+  String latDir, lonDir;
+  if ((latitude.toFloat() >= 0)) {
+    latDir = 'N';
+  }
+  else {
+    latDir = 'S';
+    latitudeS.replace('-',' ');
+  }
+  if ((longitude.toFloat() >= 0)) {
+    lonDir = 'E';
+  }
+  else {
+    lonDir = 'W';
+    longitudeS.replace('-',' ');
+  }
+  latitudeS  = (latitudeS  + latDir + " Degs");
+  longitudeS = (longitudeS + lonDir + " Degs");
   Serial.println();
   Serial.println(dateS);
   Serial.println("Today is " + getDayOfWeek(dayOfWeek(yearI, monthI, dayI)));
@@ -258,9 +278,9 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.print("Wind direction  ");
   Serial.println(windDirection + " Deg");
   Serial.print("Latitude ");
-  Serial.println(latitude + " Deg");
+  Serial.println(latitudeS);
   Serial.print("Longitude ");
-  Serial.println(longitude + " Deg");
+  Serial.println(longitudeS);
   Serial.print("Sunrise ");
   Serial.print(riseI);
   Serial.println("am");
@@ -810,10 +830,8 @@ void clearIcon()
 }
 
 /* Helper functions for determing local time & date (from UTC)
-
   The following three functions ripped off from Electrical Engineering Stack Exchange
   http://electronics.stackexchange.com/questions/66285/how-to-calculate-day-of-the-week-for-rtc
-
    Returns the number of days to the start of the specified year, taking leap
    years into account, but not the shift from the Julian calendar to the
    Gregorian calendar. Instead, it is as though the Gregorian calendar is
@@ -844,7 +862,6 @@ uint8_t dayOfWeek(uint16_t year, uint8_t month, uint8_t day)
 
 /* Ripped off from Stackoverflow
   http://stackoverflow.com/questions/5590429/calculating-daylight-saving-time-from-only-date
-
   Check to see if it's Daylight Savings Time (DST)
 */
 bool IsDST(uint8_t day, uint8_t month , uint8_t DOW)
@@ -996,17 +1013,11 @@ String getDayOfWeek(uint8_t day)
 /*
   Computes Sun rise/set times, start/end of twilight, and
   the length of the day at any date and latitude
-
   Written as DAYLEN.C, 1989-08-16
-
   Modified to SUNRISET.C, 1992-12-01
-
   (c) Paul Schlyter, 1989, 1992
-
   Released to the public domain by Paul Schlyter, December 1992
-
   http://stjarnhimlen.se/comp/sunriset.c
-
 */
 
 /* The "workhorse" function for sun rise/set times */
