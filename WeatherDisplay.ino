@@ -242,17 +242,19 @@ void getWeatherData() //client function to send/receive GET request data.
   String latDir, lonDir;
   if ((latitude.toFloat() >= 0)) {
     latDir = 'N';
+    latitudeS = (' ' + latitudeS);
   }
   else {
     latDir = 'S';
-    latitudeS.replace('-',' ');
+    latitudeS.replace('-', ' ');
   }
   if ((longitude.toFloat() >= 0)) {
     lonDir = 'E';
+    longitudeS = (' ' + longitudeS);
   }
   else {
     lonDir = 'W';
-    longitudeS.replace('-',' ');
+    longitudeS.replace('-', ' ');
   }
   latitudeS  = (latitudeS  + latDir + " Degs");
   longitudeS = (longitudeS + lonDir + " Degs");
