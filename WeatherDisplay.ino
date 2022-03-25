@@ -236,7 +236,7 @@ void getWeatherData() //client function to send/receive GET request data.
   {
     temperature.remove(length - 1);
   }
-#ifdef DEBUG
+
   String latitudeS = latitude;
   String longitudeS = longitude;
   String latDir, lonDir;
@@ -258,6 +258,7 @@ void getWeatherData() //client function to send/receive GET request data.
   }
   latitudeS  = (latitudeS  + latDir + " Degs");
   longitudeS = (longitudeS + lonDir + " Degs");
+#ifdef DEBUG
   Serial.println();
   Serial.println(dateS);
   Serial.println("Today is " + getDayOfWeek(dayOfWeek(yearI, monthI, dayI)));
@@ -299,6 +300,8 @@ void getWeatherData() //client function to send/receive GET request data.
   if (toggleDisplay) {
     // Display the aux weather
     printAuxData(location,
+                 latitudeS,
+                 longitudeS,
                  temperature,
                  humidity,
                  description,
@@ -332,6 +335,8 @@ void getWeatherData() //client function to send/receive GET request data.
 
 // Displays the aux weather
 void printAuxData(String location,
+                  String latitudeS,
+                  String longitudeS,
                   String temperature,
                   String humidity,
                   String description,
@@ -380,6 +385,14 @@ void printAuxData(String location,
   tft.print("Location: ");
   tft.setTextColor(textColor[anotherRandomColor]);
   tft.println(location);
+  tft.setTextColor(textColor[randomColor]);
+  tft.print("Lat");
+  tft.setTextColor(textColor[anotherRandomColor]);
+  tft.println(latitudeS);
+  tft.setTextColor(textColor[randomColor]);
+  tft.print("Long");
+  tft.setTextColor(textColor[anotherRandomColor]);
+  tft.println(longitudeS);
   tft.setTextColor(textColor[randomColor]);
   tft.print("Temperature: ");
   tft.setTextColor(textColor[anotherRandomColor]);
@@ -442,9 +455,7 @@ void printAuxData(String location,
   tft.setTextColor(textColor[randomColor]);
   tft.print("It is ");
   tft.setTextColor(textColor[anotherRandomColor]);
-  tft.print((night) ? "Night " : "Day ");
-  tft.setTextColor(textColor[randomColor]);
-  tft.println("time");
+  tft.println((night) ? "Night time" : "Day time");
 }
 
 // Displays the main weather
