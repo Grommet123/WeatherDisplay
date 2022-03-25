@@ -275,13 +275,13 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.println(temperature + " f");
   Serial.print("Humidity ");
   Serial.println(humidity + "% RH");
-  Serial.print("Wind speed  ");
+  Serial.print("Wind speed ");
   Serial.println(windSpeed + " MPH");
-  Serial.print("Wind direction  ");
+  Serial.print("Wind direction ");
   Serial.println(windDirection + " Deg");
-  Serial.print("Latitude ");
+  Serial.print("Latitude");
   Serial.println(latitudeS);
-  Serial.print("Longitude ");
+  Serial.print("Longitude");
   Serial.println(longitudeS);
   Serial.print("Sunrise ");
   Serial.print(riseI);
