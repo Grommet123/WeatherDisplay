@@ -14,7 +14,6 @@
 #include <ArduinoJson.h>
 #include <Adafruit_ST7735.h>
 #include <Adafruit_GFX.h>
-#include <Math.h>
 
 WiFiClient client; // WIFI client object
 String serverName = "api.openweathermap.org"; // Remote server we will connect to
@@ -226,6 +225,7 @@ void getWeatherData() //client function to send/receive GET request data.
   bool DST = false;
   int riseI, setI, monthI, dayI, yearI;
   String timeUTC = timeS;
+  String timeRaw = timeUTC;
   timeUTC = timeUTC.substring(timeUTC.length() - 8, timeUTC.length()); // Strip out the time (XX:XX:XX)
   timeS = convertGMTTimeToLocal(timeS, latitude, longitude,
                                 &riseI, &setI, &monthI, &dayI, &yearI, &DST);
@@ -260,6 +260,8 @@ void getWeatherData() //client function to send/receive GET request data.
   longitudeS = (longitudeS + lonDir + " Degs");
 #ifdef DEBUG
   Serial.println();
+  Serial.print("Raw date/time ");
+  Serial.println(timeRaw);
   Serial.println(dateS);
   Serial.println("Today is " + getDayOfWeek(dayOfWeek(yearI, monthI, dayI)));
   Serial.println((DST) ? "It's DST" : "It's ST");
@@ -316,7 +318,8 @@ void getWeatherData() //client function to send/receive GET request data.
                  dayI,
                  monthI,
                  yearI,
-                 DST);
+                 DST,
+                 timeRaw);
   }
   else {
     // Display the main weather
@@ -351,7 +354,8 @@ void printAuxData(String location,
                   int dayI,
                   int monthI,
                   int yearI,
-                  bool DST)
+                  bool DST,
+                  String timeRaw)
 {
   static long lastRandomNumber;
   long randomColor;
@@ -456,6 +460,11 @@ void printAuxData(String location,
   tft.print("It is ");
   tft.setTextColor(textColor[anotherRandomColor]);
   tft.println((night) ? "Night time" : "Day time");
+  tft.setTextColor(textColor[randomColor]);
+  tft.print("Raw D/T ");
+  tft.setTextColor(textColor[anotherRandomColor]);
+  if ((sizeof("Raw D/T ") + timeRaw.length()) >= 21 /*Length of line*/) timeRaw.replace(' ', '\n');
+  tft.print(timeRaw);
 }
 
 // Displays the main weather
