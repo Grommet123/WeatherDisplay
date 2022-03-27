@@ -161,7 +161,7 @@ void getWeatherData() //client function to send/receive GET request data.
     return;
   }
 
-  while (client.connected() && !client.available()) delay(1); //waits for data
+  while (client.connected() && !client.available()) delay(1); // Waits for data
 
 #ifdef DEBUG
   Serial.println("Waiting for data");
