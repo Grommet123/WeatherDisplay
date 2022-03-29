@@ -260,7 +260,7 @@ void getWeatherData() //client function to send/receive GET request data.
   longitudeS = (longitudeS + lonDir + " Degs");
 #ifdef DEBUG
   Serial.println();
-  Serial.print("Raw date/time ");
+  Serial.print("Raw UTC date/time ");
   Serial.println(timeRaw);
   Serial.println(dateS);
   Serial.println("Today is " + getDayOfWeek(dayOfWeek(yearI, monthI, dayI)));
@@ -461,9 +461,9 @@ void printAuxData(String location,
   tft.setTextColor(textColor[anotherRandomColor]);
   tft.println((night) ? "Night time" : "Day time");
   tft.setTextColor(textColor[randomColor]);
-  tft.print("Raw D/T ");
+  tft.print("Raw UTC ");
   tft.setTextColor(textColor[anotherRandomColor]);
-  if ((sizeof("Raw D/T ") + timeRaw.length()) >= 21 /*Length of line*/) timeRaw.replace(' ', '\n');
+  if ((sizeof("Raw UTC ") + timeRaw.length()) >= 21 /*Length of line*/) timeRaw.replace(' ', '\n');
   tft.print(timeRaw);
 }
 
