@@ -262,7 +262,7 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.println();
   Serial.print("Version ");
   Serial.println(VERSION);
-  Serial.print("Writen by ");
+  Serial.print("Written by ");
   Serial.println(CREDIT);
   Serial.print("Raw UTC date/time ");
   Serial.println(timeRaw);
