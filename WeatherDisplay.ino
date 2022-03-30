@@ -259,11 +259,13 @@ void getWeatherData() //client function to send/receive GET request data.
   latitudeS  = (latitudeS  + latDir + " Degs");
   longitudeS = (longitudeS + lonDir + " Degs");
 #ifdef DEBUG
+  String versionS = VERSION;
+  String creditS = CREDIT;
+  versionS = ("Version " + versionS);
+  creditS =  ("Written by " + creditS);
   Serial.println();
-  Serial.print("Version ");
-  Serial.println(VERSION);
-  Serial.print("Written by ");
-  Serial.println(CREDIT);
+  Serial.println(versionS);
+  Serial.println(creditS);
   Serial.print("Raw UTC date/time ");
   Serial.println(timeRaw);
   Serial.println(dateS);
