@@ -260,6 +260,10 @@ void getWeatherData() //client function to send/receive GET request data.
   longitudeS = (longitudeS + lonDir + " Degs");
 #ifdef DEBUG
   Serial.println();
+  Serial.print("Version ");
+  Serial.println(VERSION);
+  Serial.print("Writen by ");
+  Serial.println(CREDIT);
   Serial.print("Raw UTC date/time ");
   Serial.println(timeRaw);
   Serial.println(dateS);
