@@ -57,9 +57,6 @@ void setup() {
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 5); // Center text
   tft.print("Version ");
   tft.print(VERSION);
-  maxLeghtOfParam = min((int)sizeof(CREDIT), 22); // Limit characters
-  tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 15); // Center text
-  tft.print(CREDIT);
   tft.setTextColor(WHITE);
   maxLeghtOfParam = min((int)sizeof("Connecting to"), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 80); // Center text
@@ -67,6 +64,11 @@ void setup() {
   maxLeghtOfParam = min((int)sizeof(ssid), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 90); // Center text
   tft.print(ssid);
+  maxLeghtOfParam = min((int)sizeof("Written by ") + (int)sizeof(CREDIT), 22); // Limit characters
+  tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 150); // Center text
+  tft.setTextColor(YELLOW);
+  tft.print("Written by ");
+  tft.print(CREDIT);
 
   int startCounter = 0;
 
@@ -259,13 +261,11 @@ void getWeatherData() //client function to send/receive GET request data.
   latitudeS  = (latitudeS  + latDir + " Degs");
   longitudeS = (longitudeS + lonDir + " Degs");
 #ifdef DEBUG
-  String versionS = VERSION;
-  String creditS = CREDIT;
-  versionS = ("Version " + versionS);
-  creditS =  ("Written by " + creditS);
   Serial.println();
-  Serial.println(versionS);
-  Serial.println(creditS);
+  Serial.print("Version ");
+  Serial.println(VERSION);
+  Serial.print("Written by ");
+  Serial.println(CREDIT);
   Serial.print("Raw UTC date/time ");
   Serial.println(timeRaw);
   Serial.println(dateS);
