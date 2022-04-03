@@ -21,6 +21,7 @@ String result; // WIFI buffer from NodeMCU ESP12E
 bool night = false;
 bool toggleDisplay = HIGH;
 bool pastToggleDisplay = !toggleDisplay;
+bool displayPowerSW = HIGH;
 
 Adafruit_ST7735 tft(TFT_CS, TFT_DC, TFT_RST); // TFT display object
 
@@ -89,9 +90,17 @@ void setup() {
 #ifdef DEBUG
       Serial.println("\nTimed out. Starting again...");
 #endif
-      return;
+      clearScreen();
+      tft.setTextColor(WHITE);
+      maxLeghtOfParam = min((int)sizeof("Timed out"), 22); // Limit characters
+      tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 70); // Center text
+      tft.print("Timed out");
+      maxLeghtOfParam = min((int)sizeof("Starting again"), 22); // Limit characters
+      tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 80); // Center text
+      tft.print("Starting again");
+      WiFi.begin (ssid, password);
     }
-    delay(500);
+    delay(1000);
   }
 #ifdef DEBUG
   Serial.println("WiFi connected");
@@ -262,6 +271,7 @@ void getWeatherData() //client function to send/receive GET request data.
   longitudeS = (longitudeS + lonDir + " Degs");
 #ifdef DEBUG
   Serial.println();
+  Serial.println("Weather Display");
   Serial.print("Version ");
   Serial.println(VERSION);
   Serial.print("Written by ");
@@ -651,7 +661,7 @@ String convertGMTTimeToLocal(String timeS, String latitude, String longitude,
                         &day, (double)longitude.toFloat(), true); // true means date and DST conversion
 
   // Determine night or day
-  night = (time > *setI ||  time < *riseI);
+  night = (time >= *setI || time <= *riseI);
 
   if (*riseI >= 12) { // Convert to 12 hour format
     if (*riseI > 12) *riseI -= 12;
