@@ -90,15 +90,7 @@ void setup() {
 #ifdef DEBUG
       Serial.println("\nTimed out. Starting again...");
 #endif
-      clearScreen();
-      tft.setTextColor(WHITE);
-      maxLeghtOfParam = min((int)sizeof("Timed out"), 22); // Limit characters
-      tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 70); // Center text
-      tft.print("Timed out");
-      maxLeghtOfParam = min((int)sizeof("Starting again"), 22); // Limit characters
-      tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 80); // Center text
-      tft.print("Starting again");
-      WiFi.begin (ssid, password);
+      return;
     }
     delay(1000);
   }
