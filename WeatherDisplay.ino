@@ -146,10 +146,8 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.println("Getting Weather Data");
 #endif
 
-  String APIKEY(APIKey); // openweathermap.org API key
-  String CityID(cityID); // openweathermap.org city
   if (client.connect(serverName.c_str(), PORT)) { // Starts client connection, checks for connection
-    client.println("GET /data/2.5/forecast?id=" + CityID + "&units=imperial&cnt=1&APPID=" + APIKEY);
+    client.println("GET /data/2.5/forecast?id=" + String(cityID) + "&units=imperial&cnt=1&APPID=" + String(APIKey));
     client.println("Host: " + serverName);
     client.println("User-Agent: ArduinoWiFi/1.1");
     client.println("Connection: close");  // Close 1.1 persistent connection
