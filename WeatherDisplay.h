@@ -8,7 +8,7 @@
 #define WeatherDisplay_h
 #include <Arduino.h>
 
-#define VERSION  "13.2"        // Version number of the software
+#define VERSION  "13.3"        // Version number of the software
 #define GETDATACOUNT 60 * 60   // Time to get more data (in seconds)
 #define PORT 80                // Port number of remote server
 #define ERROROFFSET            // Add time/date error offset
@@ -21,7 +21,7 @@
 #define TFT_DC   D4            // TFT AO/DC pin
 #define TFT_RST  D0            // TFT reset pin
 //#define PERMANENT_DST          // Permanent DST (Comment out if and when this takes affect)
-#define DEBUG                  // Display debug data
+//#define DEBUG                  // Display debug data
 
 // Color definitions
 #define BLACK    0x0000
