@@ -21,7 +21,6 @@ String result; // WIFI buffer from NodeMCU ESP12E
 bool night = false;
 bool toggleDisplay = HIGH;
 bool pastToggleDisplay = !toggleDisplay;
-bool displayPowerSW = HIGH;
 
 Adafruit_ST7735 tft(TFT_CS, TFT_DC, TFT_RST); // TFT display object
 
@@ -146,7 +145,7 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.println("Getting Weather Data");
 #endif
 
-  if (client.connect(serverName.c_str(), PORT)) { // Starts client connection, checks for connection
+  if (client.connect(serverName, PORT)) { // Starts client connection, checks for connection
     client.println("GET /data/2.5/forecast?id=" + String(cityID) + "&units=imperial&cnt=1&APPID=" + String(APIKey));
     client.println("Host: " + serverName);
     client.println("User-Agent: ArduinoWiFi/1.1");
@@ -167,11 +166,11 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.println("Waiting for data");
 #endif
 
-  while (client.connected() || client.available()) { //connected or data available
+  while (client.connected() || client.available()) { // Connected or data available
     char c = client.read(); // Gets JSON data from WIFI buffer
     result = result + c;
   }
-  client.stop(); //stop client
+  client.stop(); // Stop client
 
 #ifdef DEBUG
   Serial.println("Received data");
@@ -264,6 +263,7 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.println("Weather Display");
   Serial.println("Version " + String(VERSION));
   Serial.println("Written by " + String(CREDIT));
+  Serial.println("Remote server " + serverName);
   Serial.println("Raw UTC date/time " + timeRaw);
   Serial.println(dateS);
   Serial.println("Today is " + getDayOfWeek(dayOfWeek(yearI, monthI, dayI)));
