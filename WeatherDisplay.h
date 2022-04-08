@@ -8,13 +8,18 @@
 #define WeatherDisplay_h
 #include <Arduino.h>
 
-#define VERSION  "13.4"        // Version number of the software
+#define VERSION  "14.0"        // Version number of the software
+#define VERSION_2              // Hardware version 1 or 2 (comment out for version 1)
 #define GETDATACOUNT 60 * 60   // Time to get more data (in seconds)
 #define PORT 80                // Port number of remote server
 #define ERROROFFSET            // Add time/date error offset
 #define CREDIT "GK Grotsky"    // Yours truly :-)
 #define TOGGLEDISPLAY_SW D1    // Toggle display switch
+#ifdef VERSION_2
 #define ALIVE_LED D2           // Flashes to indicate that the system is alive
+#else
+#define ALIVE_LED D3           // Flashes to indicate that the system is alive
+#endif
 #define ALIVEBRIGHTNESS 150    // Brightness of the alive LED
 #define ArduinoJsonVer         // ArduinoJson version 5 or 6 (comment out for version 5)
 #define TFT_CS   D8            // TFT chip select pin
