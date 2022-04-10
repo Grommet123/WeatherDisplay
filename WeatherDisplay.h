@@ -8,7 +8,7 @@
 #define WeatherDisplay_h
 #include <Arduino.h>
 
-#define VERSION  "14.0"        // Version number of the software
+#define VERSION  "14.1"        // Version number of the software
 #define VERSION_2              // Hardware version 1 or 2 (comment out for version 1)
 #define GETDATACOUNT 60 * 60   // Time to get more data (in seconds)
 #define PORT 80                // Port number of remote server

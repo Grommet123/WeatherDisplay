@@ -289,10 +289,10 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.println("Weather Icon ID " + idString);
   Serial.println("Weather " + weather);
   Serial.println("Description " + description);
-  Serial.println("Temperature " + temperature + " f");
+  Serial.println("Temperature " + temperature + " Degs Fahrenheit");
   Serial.println("Humidity " + humidity + "% RH");
   Serial.println("Wind speed " + windSpeed + " MPH");
-  Serial.println("Wind direction " + windDirection + " Deg");
+  Serial.println("Wind direction " + windDirection + " Degs");
   Serial.println("Latitude" + latitudeS);
   Serial.println("Longitude" + longitudeS);
   Serial.println("Sunrise " + String(riseI) + "am");
