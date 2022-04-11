@@ -57,17 +57,10 @@ void setup() {
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 5); // Center text
   tft.print("SW version ");
   tft.print(VERSION);
-#ifdef VERSION_2
-  maxLeghtOfParam = min((int)sizeof("HW Version") + (int)sizeof(" 2"), 22); // Limit characters
+  maxLeghtOfParam = min((int)sizeof("HW Version ") + (int)sizeof(HWVERSION), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 15); // Center text
   tft.print("HW version ");
-  tft.print('2');
-#else
- maxLeghtOfParam = min((int)sizeof("HW Version") + (int)sizeof(" 1"), 22); // Limit characters
-  tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 15); // Center text
-  tft.print("HW version ");
-  tft.print('1');
-#endif
+  tft.print(HWVERSION);
   tft.setTextColor(WHITE);
   maxLeghtOfParam = min((int)sizeof("Connecting to"), 22); // Limit characters
   tft.setCursor((11 - (maxLeghtOfParam / 2)) * 4, 80); // Center text
@@ -273,11 +266,7 @@ void getWeatherData() //client function to send/receive GET request data.
   Serial.println();
   Serial.println("Weather Display");
   Serial.println("SW version " + String(VERSION));
-#ifdef VERSION_2
-  Serial.println("HW version 2");
-#else
-  Serial.println("HW version 1");
-#endif
+  Serial.println("HW version " + String(HWVERSION));
   Serial.println("Written by " + String(CREDIT));
   Serial.println("Remote server " + serverName);
   Serial.println("Raw UTC date/time " + timeRaw);
